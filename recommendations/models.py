@@ -3,11 +3,26 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class User(AbstractUser):
-    bio = models.TextField(max_length=500, blank=True)
-    avatar = models.ImageField(upload_to='avatars/', blank=True)
+    # Basic profile
+    email = models.EmailField(unique=True)
+    display_name = models.CharField(max_length=100, blank=True)
+    bio = models.TextField(blank=True, null=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+    date_of_birth = models.DateField(blank=True, null=True)
+    location = models.CharField(max_length=100, blank=True)
+    interests = models.JSONField(blank=True, null=True, help_text="List of user interests/tags")
+    is_premium = models.BooleanField(default=False)
+    onboarding_complete = models.BooleanField(default=False)
+    last_active = models.DateTimeField(auto_now=True)
+    followers = models.ManyToManyField('self', symmetrical=False, related_name='following', blank=True)
+    email_notifications = models.BooleanField(default=True)
+    push_notifications = models.BooleanField(default=True)
+    metadata = models.JSONField(blank=True, null=True, help_text="Additional user metadata")
+
+    REQUIRED_FIELDS = ['email']
 
     def __str__(self):
-        return self.username
+        return self.username or self.email
 
 class Content(models.Model):
     title = models.CharField(max_length=200)
