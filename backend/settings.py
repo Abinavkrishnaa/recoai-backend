@@ -12,8 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(os.path.join(BASE_DIR, 'config.env'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,6 +28,7 @@ SECRET_KEY = 'django-insecure-@5(p1@x-u^nk!4r-gv-*c-4!e-26j=f%^^dr=w))48kh%fna*3
 DEBUG = True
 
 ALLOWED_HOSTS = []
+load_dotenv()
 
 
 # Application definition
@@ -39,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'storages'
+    'storages',
+    'recommendations',
 ]
 
 MIDDLEWARE = [
@@ -83,7 +87,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': 'db',
+        'HOST': os.getenv('POSTGRES_HOST'),
         'PORT': os.getenv('POSTGRES_PORT'),
     }
 }
@@ -107,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+AUTH_USER_MODEL = 'recommendations.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
