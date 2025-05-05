@@ -2,7 +2,6 @@ import numpy as np
 import torch
 from pathlib import Path
 from .recommender import Recommender
-from django.core.cache import cache
 class RecommenderService:
     def __init__(self):
         self.model =None
@@ -38,7 +37,6 @@ class RecommenderService:
         with torch.no_grad():
             scores = self.model(user_indices, item_indices).numpy()
 
-        # Fix: Sort descendingly
         top_indices = np.argsort(-scores)[:top_n]
         return self.item_mapping[top_indices].tolist()
 

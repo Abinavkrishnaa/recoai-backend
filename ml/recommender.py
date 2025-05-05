@@ -4,7 +4,7 @@ import numpy as np
 from pathlib import Path
 import sys
 import os
-BASE_DIR = Path(__file__).resolve().parent.parent  # Should point to recoai-backend/
+BASE_DIR = Path(__file__).resolve().parent.parent
 sys.path.append(str(BASE_DIR))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "backend.settings")
 import django
@@ -26,14 +26,13 @@ class Recommender(nn.Module):
 
 
 def get_training_data():
-    # Only use interactions with a rating
     interactions = UserInteraction.objects.exclude(rating__isnull=True)
     content_ids = list({i.content_id for i in interactions})
     if not interactions.exists():
         raise ValueError("No training data found. Add user interactions with ratings first.")
     from recommendations.models import Content
     all_content_ids = Content.objects.values_list('id', flat=True)
-    item_mapping = np.array(list(all_content_ids))  # <-- Use all valid IDs
+    item_mapping = np.array(list(all_content_ids))
 
     user_ids = []
     item_ids = []
@@ -80,7 +79,6 @@ def train_model(embedding_dim=64, epochs=10, lr=0.01):
         optimizer.step()
         print(f"Epoch: {epoch + 1}, Loss: {loss.item():.4f}")
 
-    # Save model and mappings
     model_dir = Path("ml/models")
     model_dir.mkdir(parents=True, exist_ok=True)
     torch.save(model.state_dict(), model_dir / "model.pth")

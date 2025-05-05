@@ -6,8 +6,6 @@ class Command(BaseCommand):
     help = 'Seed test data for recommendations'
 
     def handle(self, *args, **options):
-        # Create test users
-        # Create test users
         users = []
         for i in range(1, 6):
             username = f'user_{i}'
@@ -22,7 +20,6 @@ class Command(BaseCommand):
                 )
             users.append(user)
 
-        # Create test content
         contents = []
         for i in range(1, 21):
             title = f'Content {i}'
@@ -33,11 +30,10 @@ class Command(BaseCommand):
                     title=title,
                     description=f'Description for content {i}',
                     content_type='article',
-                    embedding=list(np.random.rand(128).astype(float))  # Random 128-dim vector
+                    embedding=list(np.random.rand(128).astype(float))
                 )
             contents.append(content)
 
-        # Create interactions with ratings
         for user in users:
             for content in random.sample(contents, 5):
                 UserInteraction.objects.create(

@@ -1,15 +1,12 @@
 from rest_framework.generics import CreateAPIView,UpdateAPIView
 from rest_framework import viewsets,permissions,status
 from .models import  User,UserInteraction,Content
-from .serializers import UserInteractionSerializer,UserSerializer,ContentSerializer,RegisterSerializer
+from .serializers import UserInteractionSerializer,UserSerializer,ContentSerializer,RegisterSerializer,UserUpdateSerializer,PasswordChangeSerializer
 from  rest_framework.response import Response
 from rest_framework.views import APIView
 from ml.services import RecommenderService
-from .permissions import IsAdminOrReadOnly
-# Create your views here.
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import update_session_auth_hash
-from .serializers import UserUpdateSerializer, PasswordChangeSerializer
 
 class UserProfileView(UpdateAPIView):
     serializer_class = UserUpdateSerializer
@@ -61,7 +58,6 @@ class RecommendationView(APIView):
             print("Recommended Content IDs:", content_ids)  # Debug
             contents = Content.objects.filter(id__in=content_ids)
             print("Matched Content:", contents.count())  # Debug
-            # Maintain recommendation order
             ordered_contents = []
             for cid in content_ids:
                 for content in contents:
