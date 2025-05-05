@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, 'config.env'))
@@ -34,6 +35,7 @@ load_dotenv()
 # Application definition
 
 INSTALLED_APPS = [
+    'recommendations',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,9 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'storages',
-    'recommendations',
+    'storages'
 ]
+INSTALLED_APPS += ['drf_spectacular']
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -75,11 +77,22 @@ TEMPLATES = [
     },
 ]
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',)
 }
-
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'RecoAI API',
+    'VERSION': '1.0.0',
+}
 WSGI_APPLICATION = 'backend.wsgi.application'
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,  
+    'BLACKLIST_AFTER_ROTATION': True,
+}
 
 
 # Database

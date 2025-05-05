@@ -27,11 +27,12 @@ class User(AbstractUser):
 class Content(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(max_length=500)
-    embedding = models.JSONField()
+    embedding = models.JSONField(null=True, blank=True)
     content_type = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
 class UserInteraction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.ForeignKey(Content, on_delete=models.CASCADE)
     interaction_type = models.CharField(max_length=200)
+    rating = models.FloatField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
