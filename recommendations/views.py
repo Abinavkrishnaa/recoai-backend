@@ -69,3 +69,9 @@ class RecommendationView(APIView):
             return Response(serializer.data)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+class CurrentUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user, context={'request': request})
+        return Response(serializer.data)
